@@ -1,30 +1,38 @@
 # 💀 Savage Sigma AI
 
-> **A cyberpunk-themed chatbot with persistent session isolation, dynamic user name detection, and a brutal AI persona.** Powered by LangChain, Flask, and the Groq API (Llama 3.1 8B).
+> **A cyberpunk-themed AI chatbot with persistent session isolation, dynamic user name detection, and a brutal roasting persona.** Powered by Flask, the OpenAI SDK, and the Groq API (Llama 3.1 8B Instant).
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo_Available-ff007f?style=for-the-badge&logo=render&logoColor=white)](https://genai-document-intelligence.onrender.com/)
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Click_to_Launch-ff007f?style=for-the-badge)](https://genai-document-intelligence.onrender.com/)
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![Flask](https://img.shields.io/badge/Flask-Backend-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com)
-[![Groq](https://img.shields.io/badge/Groq-LLM_API-orange?style=for-the-badge)](https://groq.com)
+[![Groq](https://img.shields.io/badge/Groq-LLM_API-F55036?style=for-the-badge)](https://groq.com)
 [![License](https://img.shields.io/badge/License-MIT-brightgreen?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
 ---
 
 ## 🌐 Live Production Deployment
 
-Experience the live application directly in your browser:
+Experience the live chatbot directly in your browser — no setup required:
 
-* 🚀 **Launch Chatbot:** [**Savage Sigma AI Live**](https://genai-document-intelligence.onrender.com/)
-* 🖥️ **Hosting Platform:** Hosted on Render.com (Free Tier)
+| Application | Live Link | Platform |
+| :--- | :--- | :--- |
+| **💀 Savage Sigma AI** | [**Launch Chatbot 🚀**](https://genai-document-intelligence.onrender.com/) | Render.com (Free Tier) |
 
 > [!NOTE]
-> *Because Savage Sigma AI is hosted on a free Render tier, the container spins down after periods of inactivity. If the webpage does not load immediately, please allow **30–45 seconds** for the server to spin back up on your first visit.*
+> *Savage Sigma AI is hosted on a free Render tier. If the website has not been visited recently, the container may sleep. Please allow **30–45 seconds** for the server to spin back up on your first visit.*
 
 ---
 
-## 🌌 The Vision
+## 🌌 What is Savage Sigma AI?
 
-In a world filled with overly helpful, sanitised, and robotic AI assistants, **Savage Sigma AI** breaks the mold. Inspired by cyberpunk aesthetics and high-agency developer mindsets, Sigma doesn't spoon-feed answers. It demands your name, challenges your basic assumptions, and roasts you if your queries are lazy—coaxing you to be self-reliant while delivering highly intelligent, context-aware answers.
+In a world filled with overly helpful, sanitised, and robotic AI assistants — **Savage Sigma AI** breaks the mold.
+
+Inspired by cyberpunk aesthetics and the high-agency developer mindset, Sigma doesn't spoon-feed answers. It **demands your name**, challenges your basic assumptions, and **roasts you** if your queries are lazy — coaxing you to be self-reliant while delivering highly intelligent, context-aware answers.
+
+**Who is this for?**
+- Developers who want a fun, sarcastic coding companion.
+- Anyone looking for a creative AI experience beyond standard chatbots.
+- Students who learn better when challenged, not spoon-fed.
 
 ---
 
@@ -34,137 +42,177 @@ The application isolates user state on the client side using local storage, comm
 
 ```mermaid
 graph TD
-    User([User visits Web Page]) --> LocalStorage{Session UUID in LocalStorage?}
-    LocalStorage -- No --> GenUUID[Generate UUIDv4 & Save to LocalStorage]
-    LocalStorage -- Yes --> LoadSession[Retrieve Session UUID]
+    User(["🌐 User visits Web Page"]) --> LocalStorage{"Session UUID in<br>LocalStorage?"}
+    LocalStorage -- No --> GenUUID["Generate UUIDv4<br>& Save to LocalStorage"]
+    LocalStorage -- Yes --> LoadSession["Retrieve Session UUID"]
     GenUUID --> CheckName
     LoadSession --> CheckName
-    CheckName{User Name Set in Session?}
-    CheckName -- No --> FirstPrompt[Prompt user for name & block actual queries]
-    CheckName -- Yes --> SendMessage[Send message & session ID to Flask API]
-    FirstPrompt --> NameGuard{Is name extracted from user input?}
-    NameGuard -- No --> RoastName[Generate customized roast demanding name]
-    NameGuard -- Yes --> SaveName[Set User Name in Flask Session]
+    CheckName{"User Name Set<br>in Session?"}
+    CheckName -- No --> FirstPrompt["Prompt user for name<br>& block actual queries"]
+    CheckName -- Yes --> SendMessage["Send message &<br>session ID to Flask API"]
+    FirstPrompt --> NameGuard{"Is name extracted<br>from user input?"}
+    NameGuard -- No --> RoastName["Generate customized<br>roast demanding name"]
+    NameGuard -- Yes --> SaveName["Set User Name<br>in Flask Session"]
     SaveName --> SendMessage
-    SendMessage --> FlaskApp[Flask Backend Chat Endpoint]
-    FlaskApp --> APIKey[Verify Groq API Key]
-    APIKey --> GroqLLM[Groq Inference Engine: Llama 3.1 8B]
-    GroqLLM --> RoastPrompt[Inject System Persona & Roast/Dominate Instructions]
-    RoastPrompt --> StreamResponse[Generate reply and append to local session history]
-    StreamResponse --> RenderUI[Render cyberpunk markdown and code highlights]
+    SendMessage --> FlaskApp["Flask Backend<br>Chat Endpoint"]
+    FlaskApp --> GroqLLM["Groq Inference Engine<br>Llama 3.1 8B"]
+    GroqLLM --> RoastPrompt["Inject System Persona &<br>Roast/Dominate Instructions"]
+    RoastPrompt --> StreamResponse["Generate reply & append<br>to local session history"]
+    StreamResponse --> RenderUI["Render cyberpunk markdown<br>& code highlights in UI"]
 ```
 
 ---
 
 ## 🛠️ Key Features
 
-* **💀 Savage Persona (Sigma AI):** Implements a dark, aggressive, and sarcastic chatbot persona. It acknowledges deep questions with dominance, but thoroughly roasts basic questions to encourage independent learning.
-* **🕵️‍♂️ Dynamic Name Detection & Guards:** Automatically parses sentences (e.g. *"my name is..."*, *"i am..."*) using regex to extract your name. Once locked in, safety filters prevent simple conversational words from accidentally resetting it.
-* **🔒 Tab-Level Session Isolation:** Leverages client-side browser UUIDs. If you open a new tab or browser window, it creates a fresh independent session so that multiple users (or tasks) never cross-pollinate.
-* **⚡ Premium Cyberpunk UI:** A fully responsive user interface featuring glassmorphic neon panels, dynamic typing animation indicators, marked.js markdown compilation, and clean code block rendering with a copy-to-clipboard button.
-* **⌨️ Command Line Interface (CLI):** Includes a local command-line interface (`roast_bot.py`) for direct, fast terminal chatting.
+| Feature | Description |
+| :--- | :--- |
+| **💀 Savage Persona** | Aggressive, sarcastic chatbot. Roasts basic questions, respects deep ones — with dominance. |
+| **🕵️ Dynamic Name Detection** | Regex-powered name extraction from sentences like *"my name is..."* or *"i am..."* with guards to prevent accidental resets. |
+| **🔒 Session Isolation** | Every browser tab gets a unique UUID. Multiple users or tabs never cross-pollinate chat histories. |
+| **⚡ Cyberpunk UI** | Glassmorphic neon panels, typing animations, marked.js markdown rendering, code copy buttons. |
+| **⌨️ CLI Mode** | Chat directly in your terminal using `roast_bot.py` — no browser needed. |
 
 ---
 
-## ⚙️ Desktop Installation & Setup
+## ⚙️ Run It On Your Desktop (Full Setup Guide)
 
-Follow these simple instructions to set up and run Savage Sigma AI on your computer:
+> **Just want to try it quickly?** Use the [**Live Demo**](https://genai-document-intelligence.onrender.com/) — no installation needed.
+>
+> **Want to run your own version?** Follow every step below carefully.
 
-### 1. Prerequisite Installations
-Make sure you have [Python 3.10+](https://www.python.org/downloads/) and [Git](https://git-scm.com/) installed on your computer.
+### Step 1: Install Prerequisites
 
-### 2. Clone the Repository
-Open your terminal (or PowerShell) and clone this repository:
+Make sure you have these installed on your computer:
+
+| Tool | Download Link | How to verify |
+| :--- | :--- | :--- |
+| **Python 3.10+** | [python.org/downloads](https://www.python.org/downloads/) | Run `python --version` in your terminal |
+| **Git** | [git-scm.com](https://git-scm.com/) | Run `git --version` in your terminal |
+
+### Step 2: Clone This Repository
+
+Open your terminal (Command Prompt, PowerShell, or macOS/Linux Terminal) and run:
+
 ```bash
 git clone https://github.com/bharathwajverse/SAVAGE-SIGMA-AI.git
 cd SAVAGE-SIGMA-AI
 ```
 
-### 3. Initialize a Virtual Environment
-Create an isolated environment to prevent library dependency conflicts:
+### Step 3: Create & Activate a Virtual Environment
+
+This keeps the project's libraries isolated from your system Python:
+
 ```bash
-# Create Virtual Environment
+# Create the virtual environment
 python -m venv venv
-
-# Activate (Windows PowerShell)
-.\venv\Scripts\Activate.ps1
-
-# Activate (macOS/Linux)
-source venv/bin/activate
 ```
 
-### 4. Install Dependencies
-Install all required libraries:
+**Activate it:**
+
+| Operating System | Command |
+| :--- | :--- |
+| **Windows (PowerShell)** | `.\venv\Scripts\Activate.ps1` |
+| **Windows (CMD)** | `.\venv\Scripts\activate.bat` |
+| **macOS / Linux** | `source venv/bin/activate` |
+
+> You'll see `(venv)` at the beginning of your terminal line when it's activated.
+
+### Step 4: Install Dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
-### 5. Configure Your Environment Variables
-1. Create a file named `.env` in the root folder of the project.
-2. Open the `.env` file in your editor and add your Groq API key:
-   ```env
-   GROQ_API_KEY=your-actual-groq-api-key-here
-   ```
+### Step 5: Create the `.env` File (API Key Setup)
 
-> [!TIP]
-> **How to get a Groq API Key (100% Free):**
-> 1. Sign up/Log in to [console.groq.com](https://console.groq.com).
-> 2. Navigate to the **API Keys** tab on the left sidebar.
-> 3. Click **Create API Key**, copy it, and paste it into your `.env` file.
+You need a Groq API key to power the chatbot. **This is 100% free.**
 
-### 6. Run the Application
+1. **Get your API key:**
+   - Go to [console.groq.com](https://console.groq.com) and sign up / log in.
+   - Click **API Keys** on the left sidebar.
+   - Click **Create API Key**, then **copy** the key.
 
-#### A. Running the Web Application
-Launch the local Flask server:
+2. **Create the `.env` file:**
+   - In the root folder of the project (`SAVAGE-SIGMA-AI/`), create a new file called `.env`
+   - Open it in any text editor and paste:
+     ```env
+     GROQ_API_KEY=gsk_your_actual_api_key_here
+     ```
+   - Save the file.
+
+> [!CAUTION]
+> **Never share your `.env` file or API key publicly.** The `.gitignore` is already configured to block `.env` from being pushed to GitHub.
+
+### Step 6: Launch the Application
+
+#### Option A: Web Application (Recommended)
 ```bash
 python front.py
 ```
-After starting, open your browser and navigate to:
-```url
+Then open your browser and go to:
+```
 http://127.0.0.1:5000
 ```
 
-#### B. Running the CLI Application
-If you prefer a terminal-based chat interface:
+#### Option B: Terminal / CLI Chat
 ```bash
 python roast_bot.py
 ```
 
 ---
 
-## 📂 Repository File Structure
+## 📂 Repository Structure
 
 ```
 SAVAGE-SIGMA-AI/
+│
 ├── .devcontainer/
-│   └── devcontainer.json   # Configuration for VS Code remote development
-├── .gitignore              # Rules for files to exclude from Git
-├── Procfile                # WSGI command for deploying on Render
-├── front.py                # Main Flask API and Web server backend
-├── index.html              # Cyberpunk-styled HTML5/CSS3 frontend page
-├── roast_bot.py            # CLI version of Savage Sigma AI chatbot
-├── main.py                 # Simple Groq OpenAI-compatibility tester
-├── langchain_bot.py        # Simple LangChain integration tester
-└── requirements.txt        # Backend dependencies for Flask & Groq
+│   └── devcontainer.json       # VS Code remote container config
+│
+├── .env                        # 🔒 YOUR API KEY (not pushed to GitHub)
+├── .gitignore                  # Rules for files excluded from Git
+│
+├── front.py                    # 🟢 Main Flask API server + web backend
+├── index.html                  # 🎨 Cyberpunk HTML5/CSS3 frontend UI
+├── roast_bot.py                # ⌨️  CLI version of the chatbot
+│
+├── main.py                     # 🧪 Simple Groq OpenAI-compat tester
+├── langchain_bot.py            # 🧪 Simple LangChain integration tester
+│
+├── Procfile                    # 🚀 Render.com deployment command
+└── requirements.txt            # 📦 Python package dependencies
 ```
+
+---
+
+## 🔒 Security Summary
+
+| File | Status | Details |
+| :--- | :--- | :--- |
+| `.env` | 🔐 **Hidden** | Contains your API key. Blocked by `.gitignore` — never pushed to GitHub. |
+| `__pycache__/` | 🚫 **Excluded** | Python bytecode cache. Blocked by `.gitignore`. |
+| `venv/` | 🚫 **Excluded** | Virtual environment folder. Blocked by `.gitignore`. |
 
 ---
 
 ## 🛠️ Core Tech Stack
 
-* **Flask & Gunicorn:** Light and robust web framework for serving the app API.
-* **OpenAI Python SDK:** Standardized connection client pointing to Groq's high-speed endpoint.
-* **Vanilla HTML5 & CSS3:** Customized with neon glows, glassmorphism, responsive grids, and Google Fonts.
-* **Groq Cloud API (Llama 3.1 8B):** Extremely low-latency LLM model serving.
+| Technology | Role |
+| :--- | :--- |
+| **Flask + Gunicorn** | Lightweight web framework and production WSGI server |
+| **OpenAI Python SDK** | Standardized client pointing to Groq's OpenAI-compatible endpoint |
+| **Vanilla HTML5 & CSS3** | Custom cyberpunk UI with neon glows, glassmorphism, and Google Fonts |
+| **Groq Cloud API** | Ultra-fast Llama 3.1 8B Instant inference |
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+This project is open-source under the MIT License.
 
 ---
 
 <p align="center">
-  Developed by <a href="https://github.com/bharathwajverse">@bharathwajverse</a>
+  Developed with 💀 by <a href="https://github.com/bharathwajverse">@bharathwajverse</a>
 </p>
